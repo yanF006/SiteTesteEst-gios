@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SIE — Sistema de Estágios · IFRJ Pinheiral</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+:root {
+  --navy: #0B2D54;
+  --navy-mid: #154070;
+  --navy-light: #1E5499;
+  --accent: #E8A020;
+  --accent-light: #FDF3E0;
+  --green: #1A7A45;
+  --green-light: #E3F5EB;
+  --red: #C0392B;
+  --red-light: #FDECEA;
+  --gray-50: #F8F9FA;
+  --gray-100: #F0F2F5;
+  --gray-200: #E0E4EA;
+  --gray-300: #C8CDD6;
+  --gray-400: #9AA3B2;
+  --gray-600: #5C6678;
+  --gray-800: #2D3344;
+  --gray-900: #181D27;
+  --white: #FFFFFF;
+  --sidebar-w: 248px;
+  --font: 'DM Sans', sans-serif;
+  --mono: 'DM Mono', monospace;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
+  --shadow: 0 4px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; }
+body { font-family: var(--font); background: var(--gray-100); color: var(--gray-900); min-height: 100vh; display: flex; -webkit-font-smoothing: antialiased; }
+
+/* ---- SIDEBAR ---- */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--navy);
+  display: flex; flex-direction: column;
+  position: fixed; left: 0; top: 0; bottom: 0;
+  z-index: 100;
+  transition: transform .25s ease;
+}
+.sidebar-header {
+  padding: 24px 20px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; gap: 12px;
+}
+.logo-mark {
+  width: 38px; height: 38px; border-radius: 8px;
+  background: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 600; color: var(--navy); flex-shrink: 0;
+  letter-spacing: -.5px;
+}
+.logo-text .brand { font-size: 14px; font-weight: 600; color: #fff; letter-spacing: -.2px; }
+.logo-text .sub { font-size: 11px; color: rgba(255,255,255,.45); margin-top: 1px; }
+
+.nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
+.nav-section { margin-bottom: 6px; }
+.nav-section-label {
+  font-size: 10px; font-weight: 600; letter-spacing: .09em;
+  color: rgba(255,255,255,.32); text-transform: uppercase;
+  padding: 10px 10px 5px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px; border-radius: var(--radius);
+  font-size: 13.5px; color: rgba(255,255,255,.68);
+  cursor: pointer; transition: all .15s ease;
+  margin-bottom: 1px; text-decoration: none;
+  user-select: none;
+}
+.nav-item i { font-size: 15px; width: 18px; text-align: center; opacity: .8; }
+.nav-item:hover { background: rgba(255,255,255,.07); color: rgba(255,255,255,.9); }
+.nav-item.active { background: rgba(255,255,255,.13); color: #fff; font-weight: 500; }
+.nav-item.active i { opacity: 1; }
+.nav-badge {
+  margin-left: auto; background: var(--accent);
+  color: var(--navy); font-size: 10px; font-weight: 700;
+  padding: 1px 6px; border-radius: 99px;
+}
+
+.sidebar-footer {
+  padding: 16px 12px;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+.user-card {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; border-radius: var(--radius);
+  cursor: pointer; transition: background .15s;
+}
+.user-card:hover { background: rgba(255,255,255,.07); }
+.avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, #4BA3E3 0%, #1E5499 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; color: #fff; flex-shrink: 0;
+}
+.avatar.coord { background: linear-gradient(135deg, var(--accent) 0%, #c47c10 100%); color: var(--navy); }
+.user-info .uname { font-size: 13px; font-weight: 500; color: #fff; }
+.user-info .urole { font-size: 11px; color: rgba(255,255,255,.45); }
+.user-card .chevron { margin-left: auto; color: rgba(255,255,255,.3); font-size: 12px; }
+
+/* ---- MAIN ---- */
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1; display: flex; flex-direction: column;
+  min-height: 100vh;
+}
+.topbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  padding: 0 28px;
+  height: 58px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 50;
+}
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+.page-title { font-size: 17px; font-weight: 600; color: var(--gray-900); }
+.breadcrumb { font-size: 12px; color: var(--gray-400); display: flex; align-items: center; gap: 5px; }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+
+.content { padding: 28px; flex: 1; }
+
+/* ---- BUTTONS ---- */
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 16px; border-radius: var(--radius);
+  font-family: var(--font); font-size: 13.5px; font-weight: 500;
+  cursor: pointer; transition: all .15s ease; border: none; text-decoration: none;
+  white-space: nowrap;
+}
+.btn-primary { background: var(--navy); color: #fff; }
+.btn-primary:hover { background: var(--navy-light); }
+.btn-secondary { background: var(--white); color: var(--gray-800); border: 1px solid var(--gray-200); }
+.btn-secondary:hover { background: var(--gray-50); border-color: var(--gray-300); }
+.btn-danger { background: var(--red-light); color: var(--red); border: 1px solid #f5c6c3; }
+.btn-danger:hover { background: #fad8d5; }
+.btn-sm { padding: 5px 11px; font-size: 12.5px; }
+.btn-icon { width: 32px; height: 32px; padding: 0; justify-content: center; border-radius: var(--radius); background: transparent; border: 1px solid var(--gray-200); color: var(--gray-600); cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; transition: all .15s; }
+.btn-icon:hover { background: var(--gray-100); }
+
+/* ---- CARDS ---- */
+.card {
+  background: var(--white); border-radius: var(--radius-lg);
+  border: 1px solid var(--gray-200); padding: 22px 24px;
+  box-shadow: var(--shadow-sm);
+}
+.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.card-title { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+.card-sub { font-size: 13px; color: var(--gray-600); margin-top: 2px; }
+
+/* ---- METRICS ---- */
+.metrics-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
+.metric-card {
+  background: var(--white); border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg); padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+}
+.metric-card.accent { border-left: 3px solid var(--accent); }
+.metric-card.green { border-left: 3px solid var(--green); }
+.metric-card.navy { border-left: 3px solid var(--navy-light); }
+.metric-card.orange { border-left: 3px solid #E06020; }
+.metric-label { font-size: 12px; font-weight: 500; color: var(--gray-400); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+.metric-value { font-size: 28px; font-weight: 600; color: var(--gray-900); line-height: 1; }
+.metric-sub { font-size: 12px; color: var(--gray-400); margin-top: 5px; }
+
+/* ---- TABLE ---- */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+thead th {
+  padding: 10px 14px; text-align: left;
+  font-size: 11.5px; font-weight: 600; letter-spacing: .04em;
+  color: var(--gray-400); text-transform: uppercase;
+  border-bottom: 1px solid var(--gray-200);
+  background: var(--gray-50);
+}
+thead th:first-child { border-radius: var(--radius) 0 0 0; }
+thead th:last-child { border-radius: 0 var(--radius) 0 0; }
+tbody td { padding: 13px 14px; border-bottom: 1px solid var(--gray-100); color: var(--gray-800); vertical-align: middle; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--gray-50); }
+.td-primary { font-weight: 500; color: var(--gray-900); }
+
+/* ---- BADGES ---- */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px; border-radius: 99px;
+  font-size: 12px; font-weight: 500; white-space: nowrap;
+}
+.badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.badge-green { background: var(--green-light); color: var(--green); }
+.badge-green::before { background: var(--green); }
+.badge-amber { background: var(--accent-light); color: #9a6010; }
+.badge-amber::before { background: var(--accent); }
+.badge-red { background: var(--red-light); color: var(--red); }
+.badge-red::before { background: var(--red); }
+.badge-gray { background: var(--gray-100); color: var(--gray-600); }
+.badge-gray::before { background: var(--gray-400); }
+.badge-navy { background: #E8EFF8; color: var(--navy-light); }
+.badge-navy::before { background: var(--navy-light); }
+
+/* ---- FORMS ---- */
+.form-section { margin-bottom: 28px; }
+.form-section-title {
+  font-size: 13px; font-weight: 600; color: var(--gray-600);
+  text-transform: uppercase; letter-spacing: .06em;
+  margin-bottom: 14px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--gray-200);
+  display: flex; align-items: center; gap: 8px;
+}
+.form-section-title i { font-size: 14px; color: var(--navy-light); }
+.form-row { display: grid; gap: 16px; margin-bottom: 14px; }
+.form-row.cols2 { grid-template-columns: 1fr 1fr; }
+.form-row.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+.form-row.cols4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group.full { grid-column: 1/-1; }
+label.field-label {
+  font-size: 12px; font-weight: 600; color: var(--gray-600);
+  letter-spacing: .02em;
+}
+input[type=text], input[type=email], input[type=date], input[type=number], input[type=tel], input[type=password], select, textarea {
+  width: 100%; padding: 9px 12px;
+  border: 1px solid var(--gray-200); border-radius: var(--radius);
+  font-family: var(--font); font-size: 14px; color: var(--gray-900);
+  background: var(--white); transition: border-color .15s, box-shadow .15s;
+  outline: none; appearance: none;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--navy-light);
+  box-shadow: 0 0 0 3px rgba(30,84,153,.1);
+}
+input:disabled, .field-auto {
+  background: var(--gray-50); color: var(--gray-600);
+  cursor: not-allowed; border-color: var(--gray-200);
+}
+.field-auto {
+  padding: 9px 12px; border: 1px solid var(--gray-200);
+  border-radius: var(--radius); font-size: 14px;
+  display: flex; align-items: center; gap: 6px;
+}
+.field-auto i { color: var(--gray-400); font-size: 13px; }
+textarea { resize: vertical; min-height: 90px; line-height: 1.5; }
+.field-hint { font-size: 11.5px; color: var(--gray-400); margin-top: 3px; }
+
+/* ---- ALERTS ---- */
+.alert {
+  padding: 12px 16px; border-radius: var(--radius);
+  font-size: 13.5px; display: flex; align-items: flex-start;
+  gap: 10px; margin-bottom: 18px; line-height: 1.5;
+}
+.alert i { font-size: 15px; margin-top: 1px; flex-shrink: 0; }
+.alert-info { background: #EBF3FB; color: #1a5e9e; border: 1px solid #c2daf5; }
+.alert-warn { background: var(--accent-light); color: #7a4f08; border: 1px solid #f5d898; }
+.alert-success { background: var(--green-light); color: #145a32; border: 1px solid #a8dfc0; }
+.alert-error { background: var(--red-light); color: var(--red); border: 1px solid #f5c6c3; }
+
+/* ---- STEPPER ---- */
+.stepper {
+  display: flex; align-items: center;
+  padding: 18px 24px; background: var(--gray-50);
+  border-bottom: 1px solid var(--gray-200); gap: 0;
+}
+.step { display: flex; align-items: center; flex: 1; }
+.step-circle {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid var(--gray-300);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; color: var(--gray-400);
+  flex-shrink: 0; transition: all .2s;
+}
+.step.done .step-circle { background: var(--green); border-color: var(--green); color: #fff; }
+.step.active .step-circle { background: var(--navy); border-color: var(--navy); color: #fff; }
+.step-label { font-size: 12.5px; color: var(--gray-400); margin-left: 8px; font-weight: 500; }
+.step.active .step-label { color: var(--gray-900); }
+.step.done .step-label { color: var(--green); }
+.step-connector { flex: 1; height: 1px; background: var(--gray-200); margin: 0 12px; }
+.step-connector.done { background: var(--green); }
+
+/* ---- MODAL ---- */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.4); z-index: 200;
+  align-items: center; justify-content: center;
+  padding: 24px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--white); border-radius: var(--radius-lg);
+  width: 100%; max-width: 560px; max-height: 90vh;
+  overflow-y: auto; box-shadow: var(--shadow-lg);
+  animation: fadeUp .2s ease;
+}
+@keyframes fadeUp { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
+.modal-header {
+  padding: 20px 24px; border-bottom: 1px solid var(--gray-200);
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; background: var(--white); z-index: 1;
+}
+.modal-header h3 { font-size: 16px; font-weight: 600; }
+.modal-body { padding: 24px; }
+.modal-footer {
+  padding: 16px 24px; border-top: 1px solid var(--gray-200);
+  display: flex; justify-content: flex-end; gap: 10px;
+  background: var(--gray-50);
+}
+
+/* ---- SECTIONS ---- */
+.section { display: none; }
+.section.active { display: block; }
+
+/* ---- SEARCH BAR ---- */
+.search-bar {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--gray-50); border: 1px solid var(--gray-200);
+  border-radius: var(--radius); padding: 7px 12px;
+  width: 260px;
+}
+.search-bar i { color: var(--gray-400); font-size: 14px; flex-shrink: 0; }
+.search-bar input {
+  border: none; background: transparent; padding: 0;
+  font-size: 13.5px; width: 100%;
+  box-shadow: none !important;
+}
+
+/* ---- DOCS GRID ---- */
+.docs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.doc-card {
+  border: 1px solid var(--gray-200); border-radius: var(--radius-lg);
+  padding: 16px 18px; display: flex; align-items: center; gap: 14px;
+  background: var(--white); cursor: pointer; transition: all .15s;
+  text-decoration: none;
+}
+.doc-card:hover { border-color: var(--navy-light); box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+.doc-icon-box {
+  width: 44px; height: 44px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.doc-icon-box.pdf { background: #FDE9E9; color: var(--red); }
+.doc-icon-box.docx { background: #E3EEFE; color: #1a56c4; }
+.doc-icon-box.zip { background: #F3EDF8; color: #7a3fc0; }
+.doc-name { font-size: 14px; font-weight: 500; color: var(--gray-900); }
+.doc-meta { font-size: 12px; color: var(--gray-400); margin-top: 3px; }
+.doc-dl { margin-left: auto; color: var(--gray-400); font-size: 14px; flex-shrink: 0; }
+
+/* ---- SIGN TABLE ---- */
+.sign-cell { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+.sign-icon { font-size: 13px; }
+.sign-icon.ok { color: var(--green); }
+.sign-icon.pend { color: var(--accent); }
+.sign-icon.wait { color: var(--gray-400); }
+
+/* ---- EMPTY STATE ---- */
+.empty-state { text-align: center; padding: 48px 24px; }
+.empty-state i { font-size: 40px; color: var(--gray-300); margin-bottom: 12px; display: block; }
+.empty-state p { font-size: 14px; color: var(--gray-400); }
+
+/* ---- TABS ---- */
+.tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--gray-200); margin-bottom: 22px; }
+.tab {
+  padding: 9px 16px; font-size: 13.5px; font-weight: 500;
+  color: var(--gray-600); cursor: pointer; border-bottom: 2px solid transparent;
+  margin-bottom: -1px; transition: all .15s;
+}
+.tab.active { color: var(--navy); border-bottom-color: var(--navy); }
+.tab:hover { color: var(--navy); }
+
+/* ---- MISC ---- */
+.divider { height: 1px; background: var(--gray-200); margin: 20px 0; }
+.text-muted { color: var(--gray-400); font-size: 13px; }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11.5px; font-weight: 500; background: var(--gray-100); color: var(--gray-600); margin-right: 4px; }
+.row-actions { display: flex; gap: 6px; }
+.notification-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
+.semester-badge { background: #EBF3FB; color: var(--navy-light); font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 6px; }
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 900px) {
+  .metrics-row { grid-template-columns: 1fr 1fr; }
+  .form-row.cols3, .form-row.cols4 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: none; }
+  .main { margin-left: 0; }
+  .metrics-row { grid-template-columns: 1fr; }
+  .docs-grid { grid-template-columns: 1fr; }
+  .form-row.cols2 { grid-template-columns: 1fr; }
+}
+
+/* ---- PRINT ---- */
+@media print {
+  .sidebar, .topbar, .no-print { display: none !important; }
+  .main { margin-left: 0; }
+  .content { padding: 0; }
+  body { background: white; }
+}
+
+/* ---- ROLE SWITCHER ---- */
+.role-tag {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; padding: 3px 10px; border-radius: 99px;
+  font-weight: 600; letter-spacing: .03em;
+}
+.role-coord { background: var(--accent-light); color: #7a4f08; }
+.role-aluno { background: #EBF3FB; color: var(--navy-light); }
+</style>
+</head>
+<body>
+
+<!-- ====== SIDEBAR ====== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo-mark">SIE</div>
+    <div class="logo-text">
+      <div class="brand">Estágios IFRJ</div>
+      <div class="sub">Campus Pinheiral</div>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <div class="nav-section">
+      <div class="nav-section-label">Principal</div>
+      <div class="nav-item active" data-page="dashboard">
+        <i class="fa-solid fa-house-chimney"></i> Painel
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Gestão</div>
+      <div class="nav-item" data-page="alunos">
+        <i class="fa-solid fa-user-graduate"></i> Alunos
+      </div>
+      <div class="nav-item" data-page="convenios">
+        <i class="fa-solid fa-building-columns"></i> Convênios
+      </div>
+      <div class="nav-item" data-page="estagios">
+        <i class="fa-solid fa-briefcase"></i> Estágios
+        <span class="nav-badge">3</span>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Documentos</div>
+      <div class="nav-item" data-page="preencher">
+        <i class="fa-solid fa-file-circle-plus"></i> Preencher documento
+      </div>
+      <div class="nav-item" data-page="biblioteca">
+        <i class="fa-solid fa-folder-open"></i> Biblioteca
+      </div>
+      <div class="nav-item" data-page="assinatura">
+        <i class="fa-solid fa-pen-nib"></i> Assinatura digital
+        <span class="nav-badge">2</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div id="role-switch-hint" style="font-size:11px;color:rgba(255,255,255,.35);padding:0 10px 8px;line-height:1.4;">
+      Visualizando como: <span id="current-role-label" style="color:var(--accent);font-weight:600;">Coordenador</span>
+    </div>
+    <div class="user-card" onclick="toggleRole()">
+      <div class="avatar coord" id="avatar-init">PC</div>
+      <div class="user-info">
+        <div class="uname" id="user-name">Prof. Carlos</div>
+        <div class="urole" id="user-role-text">Coordenador · Trocar perfil</div>
+      </div>
+      <i class="fa-solid fa-arrows-rotate chevron"></i>
+    </div>
+  </div>
+</aside>
+
+<!-- ====== MAIN ====== -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div>
+        <div class="page-title" id="topbar-title">Painel</div>
+      </div>
+      <span class="semester-badge">2025.1</span>
+    </div>
+    <div class="topbar-right">
+      <div class="search-bar no-print">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="global-search" placeholder="Buscar aluno, convênio..." oninput="globalSearch(this.value)"/>
+      </div>
+      <button class="btn-icon" title="Notificações">
+        <i class="fa-regular fa-bell"></i>
+      </button>
+      <button class="btn-icon" title="Configurações">
+        <i class="fa-solid fa-gear"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- ======================= DASHBOARD ======================= -->
+    <div class="section active" id="sec-dashboard">
+      <div class="metrics-row">
+        <div class="metric-card navy">
+          <div class="metric-label">Alunos cadastrados</div>
+          <div class="metric-value">47</div>
+          <div class="metric-sub">4 cursos de licenciatura</div>
+        </div>
+        <div class="metric-card green">
+          <div class="metric-label">Estágios ativos</div>
+          <div class="metric-value">23</div>
+          <div class="metric-sub">+5 neste semestre</div>
+        </div>
+        <div class="metric-card accent">
+          <div class="metric-label">Convênios ativos</div>
+          <div class="metric-value">31</div>
+          <div class="metric-sub">8 expirados / 3 a vencer</div>
+        </div>
+        <div class="metric-card orange">
+          <div class="metric-label">Docs. pendentes</div>
+          <div class="metric-value">6</div>
+          <div class="metric-sub">Aguardando assinatura</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 340px;gap:20px;">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Estágios em andamento</div>
+              <div class="card-sub">Semestre 2025.1</div>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="navTo('estagios')">Ver todos <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Aluno</th><th>Curso</th><th>Convênio</th><th>Início</th><th>Horas</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td class="td-primary">Ana Lima</td><td>Lic. Matemática</td><td>E.E. João Pinheiro</td><td>Mar 2025</td><td>400h</td><td><span class="badge badge-green">Ativo</span></td></tr>
+                <tr><td class="td-primary">Bruno Souza</td><td>Lic. Física</td><td>E.M. Tiradentes</td><td>Mar 2025</td><td>400h</td><td><span class="badge badge-green">Ativo</span></td></tr>
+                <tr><td class="td-primary">Clara Mota</td><td>Lic. Química</td><td>Colégio Est. Sul</td><td>Fev 2025</td><td>400h</td><td><span class="badge badge-amber">Pend. assin.</span></td></tr>
+                <tr><td class="td-primary">Diego Ramos</td><td>Lic. Biologia</td><td>CIEP 203</td><td>Jan 2025</td><td>200h</td><td><span class="badge badge-navy">Em andamento</span></td></tr>
+                <tr><td class="td-primary">Elisa Nunes</td><td>Lic. Letras</td><td>E.M. Castro Alves</td><td>Abr 2025</td><td>400h</td><td><span class="badge badge-amber">Pend. assin.</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Ações rápidas</div></div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <button class="btn btn-primary" style="width:100%;justify-content:flex-start;" onclick="navTo('preencher')"><i class="fa-solid fa-file-circle-plus"></i> Preencher novo documento</button>
+              <button class="btn btn-secondary" style="width:100%;justify-content:flex-start;" onclick="openModal('modal-aluno')"><i class="fa-solid fa-user-plus"></i> Cadastrar aluno</button>
+              <button class="btn btn-secondary" style="width:100%;justify-content:flex-start;" onclick="openModal('modal-convenio')"><i class="fa-solid fa-building-circle-check"></i> Cadastrar convênio</button>
+              <button class="btn btn-secondary" style="width:100%;justify-content:flex-start;" onclick="navTo('assinatura')"><i class="fa-solid fa-pen-nib"></i> Ver assinaturas pendentes</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">Avisos</div></div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div class="alert alert-warn" style="margin:0;font-size:13px;padding:10px 12px;"><i class="fa-solid fa-triangle-exclamation"></i><span>3 convênios vencem em 60 dias.</span></div>
+              <div class="alert alert-info" style="margin:0;font-size:13px;padding:10px 12px;"><i class="fa-solid fa-circle-info"></i><span>2 TCEs aguardando assinatura do supervisor.</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================= ALUNOS ======================= -->
+    <div class="section" id="sec-alunos">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab(this,'tab-lista-alunos')">Lista de alunos</div>
+        <div class="tab" onclick="switchTab(this,'tab-cad-aluno')">Cadastrar novo</div>
+      </div>
+
+      <div id="tab-lista-alunos">
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Alunos cadastrados</div><div class="card-sub">47 alunos em 4 cursos</div></div>
+            <div style="display:flex;gap:8px;">
+              <select class="btn btn-secondary btn-sm" style="padding:5px 11px;font-size:12.5px;" onchange="filterAlunos(this.value)">
+                <option value="">Todos os cursos</option>
+                <option value="Matemática">Lic. Matemática</option>
+                <option value="Física">Lic. Física</option>
+                <option value="Química">Lic. Química</option>
+                <option value="Biologia">Lic. Biologia</option>
+                <option value="Letras">Lic. Letras</option>
+              </select>
+              <button class="btn btn-primary btn-sm" onclick="switchTab(document.querySelectorAll('.tab')[1],'tab-cad-aluno')"><i class="fa-solid fa-plus"></i> Novo aluno</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table id="alunos-table">
+              <thead><tr><th>Nome</th><th>Matrícula</th><th>Curso</th><th>Período</th><th>E-mail</th><th>Situação</th><th>Ações</th></tr></thead>
+              <tbody>
+                <tr data-curso="Matemática"><td class="td-primary">Ana Lima</td><td><span style="font-family:var(--mono);font-size:13px;">2022001</span></td><td>Lic. Matemática</td><td>6º</td><td>ana.lima@aluno.ifrj.edu.br</td><td><span class="badge badge-green">Matriculada</span></td><td><div class="row-actions"><button class="btn-icon" title="Editar" onclick="openModal('modal-aluno')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon" title="Ver documentos"><i class="fa-solid fa-folder"></i></button></div></td></tr>
+                <tr data-curso="Física"><td class="td-primary">Bruno Souza</td><td><span style="font-family:var(--mono);font-size:13px;">2022008</span></td><td>Lic. Física</td><td>7º</td><td>bruno.s@aluno.ifrj.edu.br</td><td><span class="badge badge-green">Matriculado</span></td><td><div class="row-actions"><button class="btn-icon" onclick="openModal('modal-aluno')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon"><i class="fa-solid fa-folder"></i></button></div></td></tr>
+                <tr data-curso="Química"><td class="td-primary">Clara Mota</td><td><span style="font-family:var(--mono);font-size:13px;">2021015</span></td><td>Lic. Química</td><td>7º</td><td>clara.m@aluno.ifrj.edu.br</td><td><span class="badge badge-green">Matriculada</span></td><td><div class="row-actions"><button class="btn-icon" onclick="openModal('modal-aluno')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon"><i class="fa-solid fa-folder"></i></button></div></td></tr>
+                <tr data-curso="Biologia"><td class="td-primary">Diego Ramos</td><td><span style="font-family:var(--mono);font-size:13px;">2020030</span></td><td>Lic. Biologia</td><td>8º</td><td>diego.r@aluno.ifrj.edu.br</td><td><span class="badge badge-gray">Concluído</span></td><td><div class="row-actions"><button class="btn-icon" onclick="openModal('modal-aluno')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon"><i class="fa-solid fa-folder"></i></button></div></td></tr>
+                <tr data-curso="Letras"><td class="td-primary">Elisa Nunes</td><td><span style="font-family:var(--mono);font-size:13px;">2023002</span></td><td>Lic. Letras</td><td>4º</td><td>elisa.n@aluno.ifrj.edu.br</td><td><span class="badge badge-navy">Ingressante</span></td><td><div class="row-actions"><button class="btn-icon" onclick="openModal('modal-aluno')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon"><i class="fa-solid fa-folder"></i></button></div></td></tr>
+                <tr data-curso="Matemática"><td class="td-primary">Fernando Costa</td><td><span style="font-family:var(--mono);font-size:13px;">2021042</span></td><td>Lic. Matemática</td><td>7º</td><td>fernando.c@aluno.ifrj.edu.br</td><td><span class="badge badge-green">Matriculado</span></td><td><div class="row-actions"><button class="btn-icon" onclick="openModal('modal-aluno')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon"><i class="fa-solid fa-folder"></i></button></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-cad-aluno" style="display:none;">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Cadastrar novo aluno</div></div>
+          <div class="form-section">
+            <div class="form-section-title"><i class="fa-solid fa-user"></i> Dados pessoais</div>
+            <div class="form-row cols2">
+              <div class="form-group"><label class="field-label">Nome completo *</label><input type="text" placeholder="Nome conforme RG"/></div>
+              <div class="form-group"><label class="field-label">CPF *</label><input type="text" placeholder="000.000.000-00" oninput="maskCPF(this)"/></div>
+            </div>
+            <div class="form-row cols3">
+              <div class="form-group"><label class="field-label">Data de nascimento</label><input type="date"/></div>
+              <div class="form-group"><label class="field-label">Telefone</label><input type="tel" placeholder="(24) 9 0000-0000"/></div>
+              <div class="form-group"><label class="field-label">Gênero</label><select><option>Selecionar</option><option>Feminino</option><option>Masculino</option><option>Não-binário</option><option>Prefiro não informar</option></select></div>
+            </div>
+          </div>
+          <div class="form-section">
+            <div class="form-section-title"><i class="fa-solid fa-envelope"></i> Contato</div>
+            <div class="form-row cols2">
+              <div class="form-group"><label class="field-label">E-mail institucional *</label><input type="email" placeholder="matricula@aluno.ifrj.edu.br"/></div>
+              <div class="form-group"><label class="field-label">E-mail pessoal</label><input type="email" placeholder="email@exemplo.com"/></div>
+            </div>
+          </div>
+          <div class="form-section">
+            <div class="form-section-title"><i class="fa-solid fa-graduation-cap"></i> Dados acadêmicos</div>
+            <div class="form-row cols4">
+              <div class="form-group"><label class="field-label">Matrícula *</label><input type="text" placeholder="2024XXX"/></div>
+              <div class="form-group"><label class="field-label">Curso *</label><select><option>Selecionar</option><option>Lic. Matemática</option><option>Lic. Física</option><option>Lic. Química</option><option>Lic. Biologia</option><option>Lic. Letras</option></select></div>
+              <div class="form-group"><label class="field-label">Período atual</label><select><option>1º</option><option>2º</option><option>3º</option><option>4º</option><option>5º</option><option>6º</option><option>7º</option><option>8º</option></select></div>
+              <div class="form-group"><label class="field-label">Situação</label><select><option>Matriculado</option><option>Ingressante</option><option>Concluído</option><option>Trancado</option></select></div>
+            </div>
+            <div class="form-row cols2">
+              <div class="form-group"><label class="field-label">CR acumulado</label><input type="text" placeholder="Ex: 8.5"/></div>
+              <div class="form-group"><label class="field-label">Orientador de estágio</label><select><option>Selecionar</option><option>Prof. Carlos Andrade</option><option>Profa. Mariana Silva</option><option>Prof. Roberto Lima</option></select></div>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:8px;">
+            <button class="btn btn-secondary">Cancelar</button>
+            <button class="btn btn-primary" onclick="showToast('Aluno cadastrado com sucesso!')"><i class="fa-solid fa-check"></i> Cadastrar aluno</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================= CONVÊNIOS ======================= -->
+    <div class="section" id="sec-convenios">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab(this,'tab-lista-conv')">Convênios</div>
+        <div class="tab" onclick="switchTab(this,'tab-cad-conv')">Cadastrar novo</div>
+      </div>
+
+      <div id="tab-lista-conv">
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Convênios cadastrados</div><div class="card-sub">39 convênios — 31 ativos, 8 expirados</div></div>
+            <div style="display:flex;gap:8px;">
+              <select class="btn btn-secondary btn-sm" style="padding:5px 11px;" onchange="filterConvenios(this.value)">
+                <option value="">Todos os status</option>
+                <option value="Ativo">Ativos</option>
+                <option value="Expirado">Expirados</option>
+                <option value="A vencer">A vencer</option>
+              </select>
+              <button class="btn btn-primary btn-sm" onclick="switchTab(document.querySelectorAll('.tab')[1],'tab-cad-conv')"><i class="fa-solid fa-plus"></i> Novo convênio</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table id="convenios-table">
+              <thead><tr><th>Instituição</th><th>CNPJ</th><th>Cidade</th><th>Responsável</th><th>Vigência</th><th>Status</th><th>Ações</th></tr></thead>
+              <tbody>
+                <tr data-status="Ativo"><td class="td-primary">E.E. João Pinheiro</td><td><span style="font-family:var(--mono);font-size:12.5px;">12.345.678/0001-90</span></td><td>Pinheiral</td><td>Diretora Ana Souza</td><td>Dez 2026</td><td><span class="badge badge-green">Ativo</span></td><td><div class="row-actions"><button class="btn-icon" onclick="openModal('modal-convenio')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon"><i class="fa-solid fa-eye"></i></button></div></td></tr>
+                <tr data-status="Ativo"><td class="td-primary">E.M. Tiradentes</td><td><span style="font-family:var(--mono);font-size:12.5px;">23.456.789/0001-11</span></td><td>Volta Redonda</td><td>Dir. Pedro Lima</td><td>Jun 2026</td><td><span class="badge badge-green">Ativo</span></td><td><div class="row-actions"><button class="btn-icon" onclick="openModal('modal-convenio')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon"><i class="fa-solid fa-eye"></i></button></div></td></tr>
+                <tr data-status="A vencer"><td class="td-primary">Colégio Est. Sul</td><td><span style="font-family:var(--mono);font-size:12.5px;">34.567.890/0001-22</span></td><td>Barra Mansa</td><td>Dir. Cláudia Melo</td><td>Jul 2025</td><td><span class="badge badge-amber">A vencer</span></td><td><div class="row-actions"><button class="btn-icon" onclick="openModal('modal-convenio')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon"><i class="fa-solid fa-eye"></i></button></div></td></tr>
+                <tr data-status="Expirado"><td class="td-primary">CIEP 203</td><td><span style="font-family:var(--mono);font-size:12.5px;">45.678.901/0001-33</span></td><td>Pinheiral</td><td>Dir. Jorge Santos</td><td>Jan 2025</td><td><span class="badge badge-red">Expirado</span></td><td><div class="row-actions"><button class="btn-icon" onclick="openModal('modal-convenio')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon"><i class="fa-solid fa-eye"></i></button></div></td></tr>
+                <tr data-status="Ativo"><td class="td-primary">E.M. Castro Alves</td><td><span style="font-family:var(--mono);font-size:12.5px;">56.789.012/0001-44</span></td><td>Piraí</td><td>Dir. Maria Ferreira</td><td>Dez 2026</td><td><span class="badge badge-green">Ativo</span></td><td><div class="row-actions"><button class="btn-icon" onclick="openModal('modal-convenio')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon"><i class="fa-solid fa-eye"></i></button></div></td></tr>
+                <tr data-status="Expirado"><td class="td-primary">Escola Mun. Amélia</td><td><span style="font-family:var(--mono);font-size:12.5px;">67.890.123/0001-55</span></td><td>Piraí</td><td>Dir. Tânia Rocha</td><td>Ago 2024</td><td><span class="badge badge-red">Expirado</span></td><td><div class="row-actions"><button class="btn-icon" onclick="openModal('modal-convenio')"><i class="fa-solid fa-pen"></i></button><button class="btn-icon"><i class="fa-solid fa-eye"></i></button></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-cad-conv" style="display:none;">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Cadastrar novo convênio</div></div>
+          <div class="form-section">
+            <div class="form-section-title"><i class="fa-solid fa-building"></i> Dados da instituição</div>
+            <div class="form-row cols2">
+              <div class="form-group full"><label class="field-label">Razão social / Nome da instituição *</label><input type="text" placeholder="Nome completo da instituição"/></div>
+            </div>
+            <div class="form-row cols3">
+              <div class="form-group"><label class="field-label">CNPJ *</label><input type="text" placeholder="00.000.000/0001-00"/></div>
+              <div class="form-group"><label class="field-label">Tipo de instituição</label><select><option>Escola estadual</option><option>Escola municipal</option><option>Escola federal</option><option>Escola privada</option><option>CIEP</option><option>Outro</option></select></div>
+              <div class="form-group"><label class="field-label">Cidade</label><input type="text" placeholder="Cidade"/></div>
+            </div>
+            <div class="form-row cols2">
+              <div class="form-group"><label class="field-label">Endereço completo</label><input type="text" placeholder="Rua, número, bairro"/></div>
+              <div class="form-group"><label class="field-label">CEP</label><input type="text" placeholder="00000-000"/></div>
+            </div>
+          </div>
+          <div class="form-section">
+            <div class="form-section-title"><i class="fa-solid fa-person"></i> Responsável pela instituição</div>
+            <div class="form-row cols3">
+              <div class="form-group"><label class="field-label">Nome do responsável *</label><input type="text" placeholder="Nome completo"/></div>
+              <div class="form-group"><label class="field-label">Cargo</label><input type="text" placeholder="Ex: Diretor(a)"/></div>
+              <div class="form-group"><label class="field-label">E-mail</label><input type="email" placeholder="responsavel@escola.edu"/></div>
+            </div>
+            <div class="form-row cols2">
+              <div class="form-group"><label class="field-label">Telefone</label><input type="tel" placeholder="(24) 3000-0000"/></div>
+              <div class="form-group"><label class="field-label">CPF do responsável</label><input type="text" placeholder="000.000.000-00"/></div>
+            </div>
+          </div>
+          <div class="form-section">
+            <div class="form-section-title"><i class="fa-solid fa-calendar"></i> Vigência do convênio</div>
+            <div class="form-row cols3">
+              <div class="form-group"><label class="field-label">Data de início *</label><input type="date"/></div>
+              <div class="form-group"><label class="field-label">Data de término *</label><input type="date"/></div>
+              <div class="form-group"><label class="field-label">Nº do processo</label><input type="text" placeholder="Processo interno"/></div>
+            </div>
+            <div class="form-row cols2">
+              <div class="form-group full"><label class="field-label">Observações</label><textarea placeholder="Informações adicionais sobre o convênio..."></textarea></div>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:8px;">
+            <button class="btn btn-secondary">Cancelar</button>
+            <button class="btn btn-primary" onclick="showToast('Convênio cadastrado com sucesso!')"><i class="fa-solid fa-check"></i> Cadastrar convênio</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================= ESTÁGIOS ======================= -->
+    <div class="section" id="sec-estagios">
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-header">
+          <div><div class="card-title">Todos os estágios</div><div class="card-sub">Semestre 2025.1 · 23 ativos</div></div>
+          <button class="btn btn-primary btn-sm" onclick="navTo('preencher')"><i class="fa-solid fa-file-circle-plus"></i> Novo documento</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Aluno</th><th>Curso</th><th>Unidade concedente</th><th>Supervisor</th><th>Período</th><th>CH Total</th><th>TCE</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td class="td-primary">Ana Lima</td><td>Lic. Matemática</td><td>E.E. João Pinheiro</td><td>Prof. João Silva</td><td>Mar–Dez 2025</td><td>400h</td><td><span class="badge badge-green">Assinado</span></td><td><span class="badge badge-green">Ativo</span></td></tr>
+              <tr><td class="td-primary">Bruno Souza</td><td>Lic. Física</td><td>E.M. Tiradentes</td><td>Profa. Rita Farias</td><td>Mar–Dez 2025</td><td>400h</td><td><span class="badge badge-green">Assinado</span></td><td><span class="badge badge-green">Ativo</span></td></tr>
+              <tr><td class="td-primary">Clara Mota</td><td>Lic. Química</td><td>Colégio Est. Sul</td><td>Prof. Lúcio Barros</td><td>Fev–Nov 2025</td><td>400h</td><td><span class="badge badge-amber">Pendente</span></td><td><span class="badge badge-amber">Pend. assin.</span></td></tr>
+              <tr><td class="td-primary">Diego Ramos</td><td>Lic. Biologia</td><td>CIEP 203</td><td>Profa. Sara Moura</td><td>Jan–Jun 2025</td><td>200h</td><td><span class="badge badge-green">Assinado</span></td><td><span class="badge badge-navy">Em andamento</span></td></tr>
+              <tr><td class="td-primary">Elisa Nunes</td><td>Lic. Letras</td><td>E.M. Castro Alves</td><td>Prof. Marcos Pena</td><td>Abr–Dez 2025</td><td>400h</td><td><span class="badge badge-amber">Pendente</span></td><td><span class="badge badge-amber">Pend. assin.</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================= PREENCHER DOC ======================= -->
+    <div class="section" id="sec-preencher">
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div class="stepper">
+          <div class="step done" id="step1"><div class="step-circle"><i class="fa-solid fa-check" style="font-size:11px;"></i></div><span class="step-label">Selecionar aluno</span></div>
+          <div class="step-connector done"></div>
+          <div class="step active" id="step2"><div class="step-circle">2</div><span class="step-label">Tipo de documento</span></div>
+          <div class="step-connector"></div>
+          <div class="step" id="step3"><div class="step-circle">3</div><span class="step-label">Preencher dados</span></div>
+          <div class="step-connector"></div>
+          <div class="step" id="step4"><div class="step-circle">4</div><span class="step-label">Revisar e gerar PDF</span></div>
+        </div>
+
+        <div style="padding:24px;" id="doc-step2">
+          <div class="alert alert-info"><i class="fa-solid fa-circle-info"></i> Aluno selecionado: <strong>Ana Lima</strong> — Lic. Matemática · Mat. 2022001. Os campos marcados com <i class="fa-solid fa-robot" style="font-size:11px;"></i> são preenchidos automaticamente.</div>
+          <div style="margin-bottom:16px;"><label class="field-label" style="font-size:13px;">Selecionar tipo de documento</label></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px;" id="doc-types">
+            <div class="doc-card" onclick="selectDocType(this,'TCE')" style="cursor:pointer;transition:all .15s;">
+              <div class="doc-icon-box pdf"><i class="fa-solid fa-file-contract"></i></div>
+              <div><div class="doc-name">Termo de Compromisso de Estágio (TCE)</div><div class="doc-meta">Documento principal · obrigatório</div></div>
+            </div>
+            <div class="doc-card" onclick="selectDocType(this,'Plano')" style="cursor:pointer;">
+              <div class="doc-icon-box docx"><i class="fa-solid fa-list-check"></i></div>
+              <div><div class="doc-name">Plano de Atividades</div><div class="doc-meta">Detalha atividades do estágio</div></div>
+            </div>
+            <div class="doc-card" onclick="selectDocType(this,'Relatorio')" style="cursor:pointer;">
+              <div class="doc-icon-box zip"><i class="fa-solid fa-chart-line"></i></div>
+              <div><div class="doc-name">Relatório Semestral</div><div class="doc-meta">Avaliação de desempenho</div></div>
+            </div>
+            <div class="doc-card" onclick="selectDocType(this,'Ficha')" style="cursor:pointer;">
+              <div class="doc-icon-box pdf"><i class="fa-solid fa-clipboard-check"></i></div>
+              <div><div class="doc-name">Ficha de Avaliação</div><div class="doc-meta">Preenchida pelo supervisor</div></div>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:flex-end;gap:10px;">
+            <button class="btn btn-secondary">Voltar</button>
+            <button class="btn btn-primary" onclick="advanceStep()">Continuar <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <div style="padding:24px;display:none;" id="doc-step3">
+          <div class="form-section">
+            <div class="form-section-title"><i class="fa-solid fa-user-graduate"></i> Dados do estagiário <span style="color:var(--gray-400);font-weight:400;text-transform:none;letter-spacing:0;">(preenchido automaticamente)</span></div>
+            <div class="form-row cols2">
+              <div class="form-group"><label class="field-label"><i class="fa-solid fa-robot" style="font-size:11px;color:var(--navy-light);"></i> Nome completo</label><div class="field-auto"><i class="fa-solid fa-lock"></i> Ana Lima</div></div>
+              <div class="form-group"><label class="field-label"><i class="fa-solid fa-robot" style="font-size:11px;color:var(--navy-light);"></i> CPF</label><div class="field-auto"><i class="fa-solid fa-lock"></i> 123.456.789-00</div></div>
+            </div>
+            <div class="form-row cols3">
+              <div class="form-group"><label class="field-label"><i class="fa-solid fa-robot" style="font-size:11px;color:var(--navy-light);"></i> Matrícula</label><div class="field-auto"><i class="fa-solid fa-lock"></i> 2022001</div></div>
+              <div class="form-group"><label class="field-label"><i class="fa-solid fa-robot" style="font-size:11px;color:var(--navy-light);"></i> Curso</label><div class="field-auto"><i class="fa-solid fa-lock"></i> Lic. Matemática</div></div>
+              <div class="form-group"><label class="field-label"><i class="fa-solid fa-robot" style="font-size:11px;color:var(--navy-light);"></i> E-mail</label><div class="field-auto"><i class="fa-solid fa-lock"></i> ana.lima@aluno.ifrj.edu.br</div></div>
+            </div>
+          </div>
+          <div class="form-section">
+            <div class="form-section-title"><i class="fa-solid fa-building"></i> Unidade concedente</div>
+            <div class="form-row cols2">
+              <div class="form-group"><label class="field-label">Convênio / Instituição *</label>
+                <select><option>E.E. João Pinheiro — Pinheiral</option><option>E.M. Tiradentes — Volta Redonda</option><option>Colégio Est. Sul — Barra Mansa</option><option>E.M. Castro Alves — Piraí</option></select>
+              </div>
+              <div class="form-group"><label class="field-label">Nome do supervisor *</label><input type="text" placeholder="Nome completo do supervisor"/></div>
+            </div>
+            <div class="form-row cols3">
+              <div class="form-group"><label class="field-label">Cargo do supervisor</label><input type="text" placeholder="Ex: Professor de Matemática"/></div>
+              <div class="form-group"><label class="field-label">E-mail do supervisor *</label><input type="email" placeholder="supervisor@escola.edu"/></div>
+              <div class="form-group"><label class="field-label">Telefone da unidade</label><input type="tel" placeholder="(24) 3000-0000"/></div>
+            </div>
+          </div>
+          <div class="form-section">
+            <div class="form-section-title"><i class="fa-solid fa-calendar-days"></i> Dados do estágio</div>
+            <div class="form-row cols4">
+              <div class="form-group"><label class="field-label">Data de início *</label><input type="date"/></div>
+              <div class="form-group"><label class="field-label">Data de término *</label><input type="date"/></div>
+              <div class="form-group"><label class="field-label">CH semanal (h) *</label><input type="number" placeholder="Ex: 20" min="1" max="30"/></div>
+              <div class="form-group"><label class="field-label">CH total (h) *</label><input type="number" placeholder="Ex: 400" min="1"/></div>
+            </div>
+            <div class="form-row cols2">
+              <div class="form-group"><label class="field-label">Turno</label><select><option>Matutino</option><option>Vespertino</option><option>Noturno</option><option>Integral</option></select></div>
+              <div class="form-group"><label class="field-label">Modalidade</label><select><option>Presencial</option><option>Remoto</option><option>Híbrido</option></select></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group full"><label class="field-label">Atividades a serem desenvolvidas *</label><textarea placeholder="Descreva as atividades pedagógicas, observação de aulas, regência, etc."></textarea><span class="field-hint">Seja específico quanto às disciplinas e nível de ensino envolvidos.</span></div>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:8px;">
+            <button class="btn btn-secondary" onclick="backStep()">Voltar</button>
+            <button class="btn btn-primary" onclick="advanceStep2()">Revisar e gerar PDF <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <div style="padding:24px;display:none;" id="doc-step4">
+          <div class="alert alert-success"><i class="fa-solid fa-circle-check"></i> Documento preenchido. Revise as informações antes de gerar o PDF.</div>
+          <div style="border:1.5px dashed var(--gray-300);border-radius:var(--radius-lg);padding:28px;margin-bottom:20px;background:var(--gray-50);">
+            <div style="text-align:center;margin-bottom:20px;">
+              <div style="font-size:11px;color:var(--gray-400);text-transform:uppercase;letter-spacing:.08em;">IFRJ – Instituto Federal de Educação, Ciência e Tecnologia do Rio de Janeiro</div>
+              <div style="font-size:11px;color:var(--gray-400);">Campus Pinheiral · Pró-Reitoria de Ensino</div>
+              <div style="font-size:17px;font-weight:700;color:var(--navy);margin:12px 0 4px;">TERMO DE COMPROMISSO DE ESTÁGIO</div>
+              <div style="font-size:12px;color:var(--gray-600);">Curso de Licenciatura em Matemática</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;">
+              <div><span style="color:var(--gray-400);">Estagiário(a):</span> <strong>Ana Lima</strong></div>
+              <div><span style="color:var(--gray-400);">CPF:</span> 123.456.789-00</div>
+              <div><span style="color:var(--gray-400);">Matrícula:</span> 2022001</div>
+              <div><span style="color:var(--gray-400);">Período:</span> 6º semestre</div>
+              <div><span style="color:var(--gray-400);">Unidade:</span> E.E. João Pinheiro</div>
+              <div><span style="color:var(--gray-400);">Supervisor:</span> Prof. João Silva</div>
+              <div><span style="color:var(--gray-400);">Início:</span> 03/03/2025</div>
+              <div><span style="color:var(--gray-400);">Término:</span> 12/12/2025</div>
+              <div><span style="color:var(--gray-400);">CH semanal:</span> 20h</div>
+              <div><span style="color:var(--gray-400);">CH total:</span> 400h</div>
+            </div>
+            <div style="margin-top:12px;font-size:13px;color:var(--gray-600);">Atividades: Observação e regência de aulas de Matemática no Ensino Médio, elaboração de planos de aula, apoio pedagógico e participação em reuniões de planejamento.</div>
+            <div style="margin-top:20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;text-align:center;font-size:12px;color:var(--gray-600);">
+              <div style="border-top:1px solid var(--gray-300);padding-top:8px;">Ana Lima<br>Estagiária</div>
+              <div style="border-top:1px solid var(--gray-300);padding-top:8px;">Prof. Carlos Andrade<br>Coordenador IFRJ</div>
+              <div style="border-top:1px solid var(--gray-300);padding-top:8px;">Prof. João Silva<br>Supervisor</div>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:flex-end;gap:10px;">
+            <button class="btn btn-secondary" onclick="backStep2()"><i class="fa-solid fa-pen"></i> Editar</button>
+            <button class="btn btn-secondary" onclick="navTo('assinatura')"><i class="fa-solid fa-pen-nib"></i> Enviar para assinatura</button>
+            <button class="btn btn-primary" onclick="showToast('PDF gerado e salvo com sucesso!');window.print()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================= BIBLIOTECA ======================= -->
+    <div class="section" id="sec-biblioteca">
+      <div class="alert alert-info" style="margin-bottom:20px;"><i class="fa-solid fa-circle-info"></i> Estes documentos são disponibilizados pela coordenação. Alunos e coordenadores podem fazer o download.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--gray-400);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Documentos de estágio</div>
+          <div class="docs-grid" style="grid-template-columns:1fr;">
+            <a class="doc-card" href="#"><div class="doc-icon-box pdf"><i class="fa-solid fa-file-contract"></i></div><div><div class="doc-name">Termo de Compromisso de Estágio</div><div class="doc-meta">Atualizado Jan 2025 · PDF</div></div><i class="fa-solid fa-download doc-dl"></i></a>
+            <a class="doc-card" href="#"><div class="doc-icon-box docx"><i class="fa-solid fa-list-check"></i></div><div><div class="doc-name">Plano de Atividades de Estágio</div><div class="doc-meta">Atualizado Jan 2025 · DOCX</div></div><i class="fa-solid fa-download doc-dl"></i></a>
+            <a class="doc-card" href="#"><div class="doc-icon-box zip"><i class="fa-solid fa-chart-line"></i></div><div><div class="doc-name">Relatório Semestral de Estágio</div><div class="doc-meta">Atualizado Ago 2024 · DOCX</div></div><i class="fa-solid fa-download doc-dl"></i></a>
+            <a class="doc-card" href="#"><div class="doc-icon-box pdf"><i class="fa-solid fa-clipboard-check"></i></div><div><div class="doc-name">Ficha de Avaliação — Supervisor</div><div class="doc-meta">Atualizado Ago 2024 · PDF</div></div><i class="fa-solid fa-download doc-dl"></i></a>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--gray-400);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Documentos institucionais</div>
+          <div class="docs-grid" style="grid-template-columns:1fr;">
+            <a class="doc-card" href="#"><div class="doc-icon-box pdf"><i class="fa-solid fa-book"></i></div><div><div class="doc-name">Regulamento de Estágios IFRJ</div><div class="doc-meta">Resolução CONSUP 2023 · PDF</div></div><i class="fa-solid fa-download doc-dl"></i></a>
+            <a class="doc-card" href="#"><div class="doc-icon-box docx"><i class="fa-solid fa-file-lines"></i></div><div><div class="doc-name">Lei nº 11.788/2008 — Lei do Estágio</div><div class="doc-meta">Legislação federal · PDF</div></div><i class="fa-solid fa-download doc-dl"></i></a>
+            <a class="doc-card" href="#"><div class="doc-icon-box zip"><i class="fa-solid fa-file-zipper"></i></div><div><div class="doc-name">Kit documentos completo</div><div class="doc-meta">Todos os formulários · ZIP</div></div><i class="fa-solid fa-download doc-dl"></i></a>
+            <a class="doc-card" href="#"><div class="doc-icon-box pdf"><i class="fa-solid fa-shield-halved"></i></div><div><div class="doc-name">Declaração de matrícula (modelo)</div><div class="doc-meta">Para abertura de estágio · PDF</div></div><i class="fa-solid fa-download doc-dl"></i></a>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:20px;" id="coord-upload-section">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Adicionar novo documento</div></div>
+          <div class="form-row cols3">
+            <div class="form-group"><label class="field-label">Nome do documento</label><input type="text" placeholder="Nome exibido na biblioteca"/></div>
+            <div class="form-group"><label class="field-label">Categoria</label><select><option>Documentos de estágio</option><option>Documentos institucionais</option></select></div>
+            <div class="form-group"><label class="field-label">Arquivo</label><input type="text" placeholder="Selecionar arquivo (simulado)"/></div>
+          </div>
+          <div style="display:flex;justify-content:flex-end;gap:10px;">
+            <button class="btn btn-primary" onclick="showToast('Documento publicado na biblioteca!')"><i class="fa-solid fa-upload"></i> Publicar documento</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================= ASSINATURA ======================= -->
+    <div class="section" id="sec-assinatura">
+      <div class="alert alert-info" style="margin-bottom:20px;"><i class="fa-solid fa-shield-check"></i> As assinaturas são realizadas via plataforma <strong>Gov.br</strong> e possuem validade jurídica conforme a Lei nº 14.063/2020. Após geração do PDF, o sistema envia links de assinatura por e-mail.</div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Documentos para assinatura</div><div class="card-sub">2 pendentes · 1 completo</div></div>
+          <button class="btn btn-secondary btn-sm"><i class="fa-solid fa-paper-plane"></i> Reenviar todos os pendentes</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Documento</th><th>Aluno</th><th>Gerado em</th><th>Coord. assinou</th><th>Aluno assinou</th><th>Supervisor assinou</th><th>Status</th><th>Ações</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="td-primary">TCE — Ana Lima</td><td>Ana Lima</td><td>10/03/2025</td>
+                <td><div class="sign-cell"><i class="fa-solid fa-circle-check sign-icon ok"></i> Assinado</div></td>
+                <td><div class="sign-cell"><i class="fa-solid fa-circle-check sign-icon ok"></i> Assinado</div></td>
+                <td><div class="sign-cell"><i class="fa-regular fa-clock sign-icon pend"></i> Pendente</div></td>
+                <td><span class="badge badge-amber">Aguardando supervisor</span></td>
+                <td><div class="row-actions"><button class="btn btn-sm btn-secondary" onclick="showToast('Link reenviado para o supervisor!')"><i class="fa-solid fa-paper-plane"></i> Reenviar</button></div></td>
+              </tr>
+              <tr>
+                <td class="td-primary">TCE — Clara Mota</td><td>Clara Mota</td><td>08/03/2025</td>
+                <td><div class="sign-cell"><i class="fa-solid fa-circle-check sign-icon ok"></i> Assinado</div></td>
+                <td><div class="sign-cell"><i class="fa-regular fa-clock sign-icon pend"></i> Pendente</div></td>
+                <td><div class="sign-cell"><i class="fa-regular fa-circle sign-icon wait"></i> Aguardando</div></td>
+                <td><span class="badge badge-amber">Aguardando aluno</span></td>
+                <td><div class="row-actions"><button class="btn btn-sm btn-secondary" onclick="showToast('Link reenviado para a aluna!')"><i class="fa-solid fa-paper-plane"></i> Reenviar</button></div></td>
+              </tr>
+              <tr>
+                <td class="td-primary">TCE — Bruno Souza</td><td>Bruno Souza</td><td>02/03/2025</td>
+                <td><div class="sign-cell"><i class="fa-solid fa-circle-check sign-icon ok"></i> Assinado</div></td>
+                <td><div class="sign-cell"><i class="fa-solid fa-circle-check sign-icon ok"></i> Assinado</div></td>
+                <td><div class="sign-cell"><i class="fa-solid fa-circle-check sign-icon ok"></i> Assinado</div></td>
+                <td><span class="badge badge-green">Concluído</span></td>
+                <td><div class="row-actions"><button class="btn btn-sm btn-secondary"><i class="fa-solid fa-download"></i> Baixar</button></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:20px;">
+        <div class="card-header"><div class="card-title">Como funciona a assinatura digital Gov.br</div></div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
+          <div style="text-align:center;padding:16px;">
+            <div style="width:44px;height:44px;border-radius:50%;background:#EBF3FB;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:18px;color:var(--navy-light);"><i class="fa-solid fa-file-pdf"></i></div>
+            <div style="font-size:13px;font-weight:500;color:var(--gray-900);margin-bottom:4px;">1. Gerar PDF</div>
+            <div style="font-size:12px;color:var(--gray-400);">O coordenador preenche e gera o documento no sistema</div>
+          </div>
+          <div style="text-align:center;padding:16px;">
+            <div style="width:44px;height:44px;border-radius:50%;background:#EBF3FB;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:18px;color:var(--navy-light);"><i class="fa-solid fa-envelope"></i></div>
+            <div style="font-size:13px;font-weight:500;color:var(--gray-900);margin-bottom:4px;">2. Enviar links</div>
+            <div style="font-size:12px;color:var(--gray-400);">Links de assinatura Gov.br são enviados por e-mail</div>
+          </div>
+          <div style="text-align:center;padding:16px;">
+            <div style="width:44px;height:44px;border-radius:50%;background:#EBF3FB;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:18px;color:var(--navy-light);"><i class="fa-solid fa-pen-to-square"></i></div>
+            <div style="font-size:13px;font-weight:500;color:var(--gray-900);margin-bottom:4px;">3. Assinar</div>
+            <div style="font-size:12px;color:var(--gray-400);">Cada parte assina usando o login Gov.br</div>
+          </div>
+          <div style="text-align:center;padding:16px;">
+            <div style="width:44px;height:44px;border-radius:50%;background:var(--green-light);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:18px;color:var(--green);"><i class="fa-solid fa-circle-check"></i></div>
+            <div style="font-size:13px;font-weight:500;color:var(--gray-900);margin-bottom:4px;">4. Concluído</div>
+            <div style="font-size:12px;color:var(--gray-400);">Documento com validade jurídica disponível para download</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ====== MODAL ALUNO ====== -->
+<div class="modal-overlay" id="modal-aluno">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Cadastrar / Editar aluno</h3>
+      <button class="btn-icon" onclick="closeModal('modal-aluno')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row cols2">
+        <div class="form-group"><label class="field-label">Nome completo *</label><input type="text" value="Ana Lima"/></div>
+        <div class="form-group"><label class="field-label">CPF *</label><input type="text" value="123.456.789-00"/></div>
+      </div>
+      <div class="form-row cols2">
+        <div class="form-group"><label class="field-label">Matrícula *</label><input type="text" value="2022001"/></div>
+        <div class="form-group"><label class="field-label">Curso *</label><select><option selected>Lic. Matemática</option><option>Lic. Física</option><option>Lic. Química</option><option>Lic. Biologia</option><option>Lic. Letras</option></select></div>
+      </div>
+      <div class="form-row cols2">
+        <div class="form-group"><label class="field-label">E-mail institucional *</label><input type="email" value="ana.lima@aluno.ifrj.edu.br"/></div>
+        <div class="form-group"><label class="field-label">Telefone</label><input type="tel" placeholder="(24) 9 0000-0000"/></div>
+      </div>
+      <div class="form-row cols2">
+        <div class="form-group"><label class="field-label">Período atual</label><select><option>5º</option><option selected>6º</option><option>7º</option><option>8º</option></select></div>
+        <div class="form-group"><label class="field-label">Situação</label><select><option selected>Matriculada</option><option>Ingressante</option><option>Concluído</option></select></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-aluno')">Cancelar</button>
+      <button class="btn btn-primary" onclick="closeModal('modal-aluno');showToast('Dados do aluno salvos!')"><i class="fa-solid fa-check"></i> Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== MODAL CONVÊNIO ====== -->
+<div class="modal-overlay" id="modal-convenio">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Cadastrar / Editar convênio</h3>
+      <button class="btn-icon" onclick="closeModal('modal-convenio')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group full"><label class="field-label">Nome da instituição *</label><input type="text" value="E.E. João Pinheiro"/></div>
+      </div>
+      <div class="form-row cols2">
+        <div class="form-group"><label class="field-label">CNPJ *</label><input type="text" value="12.345.678/0001-90"/></div>
+        <div class="form-group"><label class="field-label">Cidade</label><input type="text" value="Pinheiral"/></div>
+      </div>
+      <div class="form-row cols2">
+        <div class="form-group"><label class="field-label">Responsável</label><input type="text" value="Diretora Ana Souza"/></div>
+        <div class="form-group"><label class="field-label">E-mail</label><input type="email" placeholder="contato@escola.edu"/></div>
+      </div>
+      <div class="form-row cols2">
+        <div class="form-group"><label class="field-label">Vigência início</label><input type="date"/></div>
+        <div class="form-group"><label class="field-label">Vigência fim</label><input type="date" value="2026-12-31"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group full"><label class="field-label">Status</label><select><option selected>Ativo</option><option>Expirado</option><option>A vencer</option></select></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger btn-sm" onclick="closeModal('modal-convenio');showToast('Convênio excluído.')"><i class="fa-solid fa-trash"></i> Excluir</button>
+      <button class="btn btn-secondary" onclick="closeModal('modal-convenio')">Cancelar</button>
+      <button class="btn btn-primary" onclick="closeModal('modal-convenio');showToast('Convênio salvo com sucesso!')"><i class="fa-solid fa-check"></i> Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== TOAST ====== -->
+<div id="toast" style="
+  position:fixed;bottom:28px;right:28px;z-index:999;
+  background:var(--gray-900);color:#fff;
+  padding:12px 20px;border-radius:var(--radius-lg);
+  font-size:14px;font-family:var(--font);
+  box-shadow:var(--shadow-lg);
+  display:none;align-items:center;gap:10px;
+  min-width:240px;max-width:360px;
+">
+  <i class="fa-solid fa-circle-check" style="color:#4ade80;font-size:16px;"></i>
+  <span id="toast-msg">Salvo com sucesso!</span>
+</div>
+
+<script>
+// ---- NAVIGATION ----
+const pages = {
+  dashboard: 'Painel',
+  alunos: 'Alunos',
+  convenios: 'Convênios',
+  estagios: 'Estágios',
+  preencher: 'Preencher documento',
+  biblioteca: 'Biblioteca de documentos',
+  assinatura: 'Assinatura digital'
+};
+
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const page = item.dataset.page;
+    if(page) navTo(page);
+  });
+});
+
+function navTo(page) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const sec = document.getElementById('sec-'+page);
+  if(sec) sec.classList.add('active');
+  const navItem = document.querySelector(`.nav-item[data-page="${page}"]`);
+  if(navItem) navItem.classList.add('active');
+  document.getElementById('topbar-title').textContent = pages[page] || page;
+}
+
+// ---- TABS ----
+function switchTab(el, targetId) {
+  const parent = el.closest('.section');
+  parent.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  const tabContents = ['tab-lista-alunos','tab-cad-aluno','tab-lista-conv','tab-cad-conv'];
+  tabContents.forEach(id => {
+    const el2 = document.getElementById(id);
+    if(el2) el2.style.display = 'none';
+  });
+  const target = document.getElementById(targetId);
+  if(target) target.style.display = 'block';
+}
+
+// ---- MODAL ----
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if(e.target === overlay) overlay.classList.remove('open');
+  });
+});
+
+// ---- TOAST ----
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.style.display = 'flex';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.style.display = 'none'; }, 3000);
+}
+
+// ---- DOC TYPE SELECTION ----
+function selectDocType(el, type) {
+  document.querySelectorAll('#doc-types .doc-card').forEach(c => {
+    c.style.border = '1px solid var(--gray-200)';
+    c.style.background = 'var(--white)';
+  });
+  el.style.border = '2px solid var(--navy-light)';
+  el.style.background = '#EBF3FB';
+}
+
+// ---- STEP NAVIGATION ----
+function advanceStep() {
+  document.getElementById('doc-step2').style.display = 'none';
+  document.getElementById('doc-step3').style.display = 'block';
+  document.getElementById('step2').classList.remove('active');
+  document.getElementById('step2').classList.add('done');
+  document.getElementById('step2').querySelector('.step-circle').innerHTML = '<i class="fa-solid fa-check" style="font-size:11px;"></i>';
+  document.getElementById('step3').classList.add('active');
+  document.querySelector('.step-connector:nth-of-type(2)').classList.add('done');
+}
+function advanceStep2() {
+  document.getElementById('doc-step3').style.display = 'none';
+  document.getElementById('doc-step4').style.display = 'block';
+  document.getElementById('step3').classList.remove('active');
+  document.getElementById('step3').classList.add('done');
+  document.getElementById('step3').querySelector('.step-circle').innerHTML = '<i class="fa-solid fa-check" style="font-size:11px;"></i>';
+  document.getElementById('step4').classList.add('active');
+}
+function backStep() {
+  document.getElementById('doc-step3').style.display = 'none';
+  document.getElementById('doc-step2').style.display = 'block';
+  document.getElementById('step3').classList.remove('active');
+  document.getElementById('step2').classList.remove('done');
+  document.getElementById('step2').classList.add('active');
+  document.getElementById('step2').querySelector('.step-circle').innerHTML = '2';
+}
+function backStep2() {
+  document.getElementById('doc-step4').style.display = 'none';
+  document.getElementById('doc-step3').style.display = 'block';
+  document.getElementById('step4').classList.remove('active');
+  document.getElementById('step3').classList.remove('done');
+  document.getElementById('step3').classList.add('active');
+  document.getElementById('step3').querySelector('.step-circle').innerHTML = '3';
+}
+
+// ---- FILTERS ----
+function filterAlunos(curso) {
+  document.querySelectorAll('#alunos-table tbody tr').forEach(row => {
+    row.style.display = (!curso || row.dataset.curso === curso) ? '' : 'none';
+  });
+}
+function filterConvenios(status) {
+  document.querySelectorAll('#convenios-table tbody tr').forEach(row => {
+    row.style.display = (!status || row.dataset.status === status) ? '' : 'none';
+  });
+}
+
+// ---- GLOBAL SEARCH ----
+function globalSearch(q) {
+  if(!q) return;
+  const term = q.toLowerCase();
+  ['alunos-table','convenios-table'].forEach(tid => {
+    const t = document.getElementById(tid);
+    if(!t) return;
+    t.querySelectorAll('tbody tr').forEach(row => {
+      row.style.display = row.textContent.toLowerCase().includes(term) ? '' : 'none';
+    });
+  });
+}
+
+// ---- ROLE TOGGLE ----
+let isCoord = true;
+function toggleRole() {
+  isCoord = !isCoord;
+  document.getElementById('user-name').textContent = isCoord ? 'Prof. Carlos' : 'Ana Lima';
+  document.getElementById('user-role-text').textContent = isCoord ? 'Coordenador · Trocar perfil' : 'Aluno · Trocar perfil';
+  document.getElementById('current-role-label').textContent = isCoord ? 'Coordenador' : 'Aluno';
+  const av = document.getElementById('avatar-init');
+  av.textContent = isCoord ? 'PC' : 'AL';
+  av.className = 'avatar ' + (isCoord ? 'coord' : '');
+  document.getElementById('coord-upload-section').style.display = isCoord ? 'block' : 'none';
+  showToast('Perfil alterado: ' + (isCoord ? 'Coordenador' : 'Aluno'));
+}
+
+// ---- CPF MASK ----
+function maskCPF(input) {
+  let v = input.value.replace(/\D/g,'');
+  if(v.length > 3) v = v.slice(0,3)+'.'+v.slice(3);
+  if(v.length > 7) v = v.slice(0,7)+'.'+v.slice(7);
+  if(v.length > 11) v = v.slice(0,11)+'-'+v.slice(11,13);
+  input.value = v.slice(0,14);
+}
+</script>
+</body>
+</html>
